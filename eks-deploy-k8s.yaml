@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: my-springboot-app
-        image: public.ecr.aws/i2b3o2c1/myrealtime-project-app:latest
+        image: public.ecr.aws/j1m3c0t5/springboot-java-app:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8085
