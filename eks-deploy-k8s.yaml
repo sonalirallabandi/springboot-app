@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: my-springboot-app
-        image: public.ecr.aws/j1m3c0t5/springboot-java-app:latest
+        image: public.ecr.aws/m5j9q0g7/verizon:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8085
