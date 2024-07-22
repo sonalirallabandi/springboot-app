@@ -45,12 +45,13 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-    - http:
-        paths:
-        - path: /java
-          pathType: Prefix
-          backend:
-            service:
-              name: service
-              port:
-                number: 80
+  - host: springboot.example.com
+     http:
+      paths:
+      - backend:
+          serviceName: springboot
+          servicePort: 80
+      - path: /java-web-app
+        backend:
+          serviceName: service
+          servicePort: 80
