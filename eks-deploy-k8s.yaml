@@ -1,42 +1,55 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: springboot-app
-  name: springboot-app
+  namespace: game-2048
+  name: deployment-spring
 spec:
-  replicas: 2
   selector:
     matchLabels:
-      app: springboot-app
+      name: spring
+  replicas: 5
   template:
     metadata:
       labels:
-        app: springboot-app
+        name: spring
     spec:
       containers:
-      - name: my-springboot-app
-        image: public.ecr.aws/m5j9q0g7/verizon:latest
+      - image: public.ecr.aws/m5j9q0g7/verizon:latest
         imagePullPolicy: Always
+        name: spring-pod
         ports:
-        - containerPort: 8085
-          name: http
-          protocol: TCP
-# service type loadbalancer       
+        - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    app: springboot-app
-    k8s-app: springboot-app
-  name: springboot-app
+  namespace: game-2048
+  name: service
 spec:
   ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: 8085
-  type: LoadBalancer
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  type: NodePort
   selector:
-    app: springboot-app
+    name: spring
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: game-2048
+  name: ingress
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+        - path: /java-web-app
+          backend:
+            service:
+              name: service
+              port:
+                number: 80
