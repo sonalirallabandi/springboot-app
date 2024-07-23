@@ -37,20 +37,18 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  namespace: game-2048
-  name: ingress
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
+  name: game-2048
+  namespace: ingress-2048
 spec:
-  ingressClassName: alb
+  ingressClassName: nginx
   rules:
-    - http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: service
-              port:
-                number: 80
+  - host: k8s-game2048-ingress2-e1d9d1f206-86903639.ap-northeast-3.elb.amazonaws.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: /java-web-app
+        backend:
+          service:
+            name: service-2048
+            port:
+              number: 80
